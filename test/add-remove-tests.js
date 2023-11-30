@@ -1,17 +1,17 @@
-var _ = require('lodash');
-var assert = require('chai').assert;
-var hiff = require('../');
+const _ = require("lodash");
+var assert = require("chai").assert;
+var hiff = require("../");
 
 function assertOneAddition(diff) {
   assert(diff.different);
   assert.equal(diff.changes.length, 1);
-  assert.equal(diff.changes[0].type, 'added');
+  assert.equal(diff.changes[0].type, "added");
 }
 
 function assertOneRemoval(diff) {
   assert(diff.different);
   assert.equal(diff.changes.length, 1);
-  assert.equal(diff.changes[0].type, 'removed');
+  assert.equal(diff.changes[0].type, "removed");
 }
 
 describe("Adding tags", function () {
@@ -35,7 +35,6 @@ describe("Adding tags", function () {
     var d = hiff.compare(html1, html2);
     assertOneAddition(d);
   });
-
 });
 
 describe("Removing tags", function () {
@@ -59,20 +58,27 @@ describe("Removing tags", function () {
     var d = hiff.compare(html1, html2);
     assertOneRemoval(d);
   });
-
 });
 
-describe("Multiple additions/removals", function() {
-  it("should be correctly recognized", function() {
-    var html1 = "<div id='multi'> <b>1</b> <br> <i>2</i> <p>3</p> <b>4</b> <a>5</a> </div>";
-    var html2 = "<div id='multi'> <a>added</a> <b>1</b> <i>2</i> <strong>Hello</strong> <em>Hi!</em> <p>3</p> <b>4</b> <a>5</a> <em>Done.</em></div>";
+describe("Multiple additions/removals", function () {
+  it("should be correctly recognized", function () {
+    var html1 =
+      "<div id='multi'> <b>1</b> <br> <i>2</i> <p>3</p> <b>4</b> <a>5</a> </div>";
+    var html2 =
+      "<div id='multi'> <a>added</a> <b>1</b> <i>2</i> <strong>Hello</strong> <em>Hi!</em> <p>3</p> <b>4</b> <a>5</a> <em>Done.</em></div>";
     var diff = hiff.compare(html1, html2);
     assert.ok(diff.different);
-    var changeTypes = _.map(diff.changes, 'type');
-    assert.deepEqual(changeTypes, ['added', 'removed', 'added', 'added', 'added']);
-    var tags = _.map(diff.changes, function(c) {
+    var changeTypes = _.map(diff.changes, "type");
+    assert.deepEqual(changeTypes, [
+      "added",
+      "removed",
+      "added",
+      "added",
+      "added",
+    ]);
+    var tags = _.map(diff.changes, function (c) {
       return (c.before.$node || c.after.$node)[0].name;
     });
-    assert.deepEqual(tags, ['a', 'br', 'strong', 'em', 'em']);
+    assert.deepEqual(tags, ["a", "br", "strong", "em", "em"]);
   });
 });
